@@ -1,0 +1,15 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+.table {
+  /* border: 1px solid teal; */
+  width: 400px;
+  td,
+  th {
+    border: 1px solid #333;
+  }
+  border-width: 1px;
+  border-color: teal;
+  border-style: solid;
+}

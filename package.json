@@ -1,0 +1,39 @@
+{
+  "name": "simple-react-class-component",
+  "version": "1.0.0",
+  "description": "simple react class component",
+  "keywords": [],
+  "main": "src/index.js",
+  "dependencies": {
+    "faker": "^2.1.1",
+    "@types/react": "^17.0.43",
+    "@types/react-dom": "^17.0.14",
+    "lodash": "4.17.19",
+    "lodash.orderby": "4.6.0",
+    "lodash.sortby": "4.7.0",
+    "mobx": "^6.3.2",
+    "mobx-react-lite": "^3.2.0",
+    "moment": "2.27.0",
+    "node-sass": "^4.14.1",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-scripts": "3.0.1",
+    "semantic-ui-css": "2.4.1",
+    "semantic-ui-react": "0.88.2"
+  },
+  "devDependencies": {
+    "typescript": "4.6.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}
