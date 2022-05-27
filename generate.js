@@ -7,7 +7,7 @@ module.exports = function () {
         date: faker.date.past(),
         company: faker.company.companyName(),
         distance: faker.random.number({ min: 1, max: 42 }),
-        amount: faker.finance.amount(),
+        amount: Math.round(faker.finance.amount()),
       };
     }),
   };
