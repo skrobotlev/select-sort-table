@@ -52,10 +52,7 @@ export const request = async () => {
 const sortNameFunc = (e, state, setState) => {
   let searchInput = e.target.value;
   let filteredData = state.original.filter((value) => {
-    return (
-      value.company.toLowerCase().includes(searchInput.toLowerCase()) ||
-      value.company.toString().includes(searchInput.toString())
-    );
+    return value.company.toLowerCase().includes(searchInput.toLowerCase());
   });
   console.log(filteredData, "filt");
   setState({ ...state, list: filteredData });

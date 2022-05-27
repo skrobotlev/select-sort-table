@@ -7,11 +7,12 @@ import orderby from "lodash.orderby";
 import "../global.scss";
 import { useStore } from "../store";
 import { observer } from "mobx-react-lite";
+import TablePagination from "./table-pagination";
 
 const columnOptions = [
   { key: 1, text: "Company", value: "company", icon: "sort down" },
   { key: 2, text: "Amount", value: "amount", icon: "sort" },
-  { key: 3, text: "Distance", value: "distance", icon: "sort" },
+  { key: 3, text: "Distance, km", value: "distance", icon: "sort" },
 ];
 
 const vulnOptions = [
@@ -28,9 +29,29 @@ const Table = observer(() => {
     original: [],
     sortObject: { field: "", order: "" },
   });
-  const [selectCol, setselectCol] = useState("");
-  const [selectSortMode, setSelectSortMode] = useState("");
+  const [page, setPage] = useState(1);
+  const pageLimit = 10;
 
+  // const doesIncludeEntry = (entry) => {
+  //   return filter.length > 0
+  //     ? textfilterOptions.filter((option) =>
+  //         entry[option].toLowerCase().includes(filter.toLowerCase())
+  //       ).length > 0
+  //     : true;
+  // };
+
+  const getPaginatedEntries = () => {
+    const offset = page * pageLimit;
+    return state.list.slice(offset, offset + pageLimit);
+  };
+
+  // const getFilteredEntries = () => {
+  //   return entries.filter((entry) => doesIncludeEntry(entry));
+  // };
+
+  const renderEntries = () => {
+    return getPaginatedEntries(state.list);
+  };
   useEffect(() => {
     request().then((res) => {
       setState({ ...state, list: res, original: res });
@@ -41,11 +62,10 @@ const Table = observer(() => {
   return (
     <>
       <br />
-      Search equal:{" "}
+      Search equal:
       <input
         type="text"
         onChange={(e) => {
-          console.log(selectSortMode, "selSorm");
           return allSorts(
             e,
             state,
@@ -66,7 +86,6 @@ const Table = observer(() => {
               icon={item.icon}
               key={item.key}
               onClick={(e) => {
-                setselectCol(item.value);
                 store.selectColumn = item.value;
               }}
             />
@@ -77,13 +96,17 @@ const Table = observer(() => {
         <Dropdown.Menu>
           {vulnOptions.map((item) => (
             <Dropdown.Item
+              disabled={
+                store.selectColumn == "company" && item.value != "name"
+                  ? true
+                  : undefined
+              }
               text={item.text}
               value={item.value}
               icon={item.icon}
               key={item.key}
               onClick={(e) => {
                 store.selectSort = item.value;
-                setSelectSortMode(item.value);
               }}
             />
           ))}
@@ -95,19 +118,19 @@ const Table = observer(() => {
       <table className="table">
         <thead>
           <tr>
-            <th>Id</th>
+            {/* <th>Id</th> */}
             <th>Date</th>
             <th>Company</th>
             <th>Amount</th>
-            <th>Distance</th>
+            <th>Distance, km</th>
           </tr>
         </thead>
         <tbody>
-          {state.list.map((item, index) => (
+          {renderEntries().map((item, index) => (
             <tr key={index}>
-              <td>
+              {/* <td>
                 <p>{index + 1}</p>
-              </td>
+              </td> */}
               <td>
                 <p>{item.date}</p>
               </td>
@@ -124,6 +147,12 @@ const Table = observer(() => {
           ))}
         </tbody>
       </table>
+      <TablePagination
+        pageLimit={10}
+        pages={state.list.length}
+        currentPage={page}
+        setPage={setPage}
+      />
     </>
   );
 });
