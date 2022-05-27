@@ -2,16 +2,17 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import "semantic-ui-css/semantic.min.css";
 import { Dropdown } from "semantic-ui-react";
-import moment from "moment";
+import { request } from "../functions/sort";
 import orderby from "lodash.orderby";
-import { sortMore } from "../functions/sort";
+import { sortFunc, sortMoreFunc, sortEqualFunc } from "../functions/sort";
 import "../global.scss";
 import { useStore } from "../store";
+import { observer } from "mobx-react-lite";
 
 const columnOptions = [
   { key: 1, text: "Company", value: "company", icon: "sort down" },
   { key: 2, text: "Amount", value: "amount", icon: "sort" },
-  { key: 3, text: "distance", value: "distance", icon: "sort" },
+  { key: 3, text: "Distance", value: "distance", icon: "sort" },
 ];
 
 const vulnOptions = [
@@ -21,40 +22,22 @@ const vulnOptions = [
   { key: 4, text: "Name", value: "name", icon: "sort" },
 ];
 
-const Table = () => {
+const Table = observer(() => {
   const { store } = useStore();
-  console.log(store, "ctns");
   const [state, setState] = useState({
     list: [],
     original: [],
     sortObject: { field: "", order: "" },
   });
-  const [cuurrentRow, setCurrentRow] = useState("");
+  const [selectCol, setselectCol] = useState("");
+  const [selectSortMode, setSelectSortMode] = useState("");
   const [fetchData, setFetchData] = useState([]);
 
-  // let list = [
-  //   {
-  //     name: "namev1",
-  //     time: 1583295463213,
-  //     type: 14,
-  //   },
-  //   {
-  //     name: "namea2",
-  //     time: 1582885423296,
-  //     type: 15,
-  //   },
-  //   {
-  //     name: "namea3",
-  //     time: 1581295463213,
-  //     type: 16,
-  //   },
-  // ];
-
-  const request = async () => {
-    const req = await fetch("http://localhost:3000/people");
-    const res = await req.json();
-    return res;
-  };
+  // const request = async () => {
+  //   const req = await fetch("http://localhost:3000/people");
+  //   const res = await req.json();
+  //   return res;
+  // };
 
   useEffect(() => {
     request().then((res) => {
@@ -64,82 +47,94 @@ const Table = () => {
     });
   }, []);
 
-  // useEffect(() => {
-  //   setState({ ...state, list, original: list });
-  // }, []);
+  // const formSortObject = (fieldName) => {
+  //   let { sortObject } = state;
+  //   console.log(sortObject, "srtOBJ");
+  //   if (!sortObject.field || sortObject.field !== fieldName) {
+  //     Object.assign(sortObject, {
+  //       field: fieldName,
+  //       order: "asc",
+  //     });
+  //     return sortObject;
+  //   } else if (sortObject.field === fieldName) {
+  //     Object.assign(sortObject, {
+  //       ...sortObject,
+  //       order: sortObject.order === "desc" ? "asc" : "desc",
+  //     });
+  //     return sortObject;
+  //   }
+  //   setState({ ...state, sortObject });
+  // };
 
-  // useEffect(() => {
-  // console.log(store.dashData, "dsh");
-  //   console.log(fetchData, "ftchDA");
-  // }, [fetchData,store.dashData]);
+  // const handleSort = (e, data) => {
+  //   let dropdDownValue = data.value;
+  //   console.log(data.value, "dat val");
+  //   let currentField = formSortObject(dropdDownValue);
+  //   let result = orderby(state.list, currentField.field, currentField.order);
+  //   setState({ ...state, list: result });
+  // };
 
-  const formSortObject = (fieldName) => {
-    let { sortObject } = state;
-    console.log(sortObject, "srtOBJ");
-    if (!sortObject.field || sortObject.field !== fieldName) {
-      Object.assign(sortObject, {
-        field: fieldName,
-        order: "asc",
-      });
-      return sortObject;
-    } else if (sortObject.field === fieldName) {
-      Object.assign(sortObject, {
-        ...sortObject,
-        order: sortObject.order === "desc" ? "asc" : "desc",
-      });
-      return sortObject;
-    }
-    setState({ ...state, sortObject });
+  const handleselectColumn = (e, data) => {
+    let selectColumn = data;
+    setselectCol(data);
+    // console.log(data.value, "dat val");
+    console.log(selectCol);
+    // let currentField = formSortObject(dropdDownValue);
+    // let result = orderby(state.list, currentField.field, currentField.order);
   };
 
-  const handleSort = (e, data) => {
-    let dropdDownValue = data.value;
-    console.log(data.value, "dat val");
-    let currentField = formSortObject(dropdDownValue);
-    let result = orderby(state.list, currentField.field, currentField.order);
-    setState({ ...state, list: result });
-  };
-
-  const handleselectRow = (e, data) => {
-    let dropdDownValue = data.value;
-    console.log(data.value, "dat val");
-    let currentField = formSortObject(dropdDownValue);
-    let result = orderby(state.list, currentField.field, currentField.order);
-    setState({ ...state, list: result });
-  };
-
-  const handleSearch = (e) => {
+  // const handleSearch = (e) => {
+  //   let searchInput = e.target.value;
+  //   let filteredData = state.original.filter((value) => {
+  //     return (
+  //       value.name.toLowerCase().includes(searchInput.toLowerCase()) ||
+  //       value.type.toString().includes(searchInput.toString())
+  //     );
+  //   });
+  //   console.log(filteredData, "filt");
+  //   setState({ ...state, list: filteredData });
+  // };
+  const equalSort = (e) => {
     let searchInput = e.target.value;
     let filteredData = state.original.filter((value) => {
-      return (
-        value.name.toLowerCase().includes(searchInput.toLowerCase()) ||
-        value.type.toString().includes(searchInput.toString())
-      );
-    });
-    console.log(filteredData, "filt");
-    setState({ ...state, list: filteredData });
-  };
-  const equalSort = (e, currentCol) => {
-    const searchInput = e.target.value;
-    console.log(searchInput);
-    let filteredData = state.original.filter((value) => {
       if (value.distance > searchInput) {
-        console.log(value, ">VAL");
         return value;
       }
       return filteredData;
     });
+    console.log(filteredData, "filDat");
     setState({ ...state, list: filteredData });
   };
 
   return (
     <>
       <br />
-      Search: <input type="text" onChange={handleSearch} />
-      Search equal: <input type="text" onChange={equalSort} />
+      {/* Search: <input type="text" onChange={handleSearch} /> */}
+      {/* Search equal: <input type="text" onChange={equalSort} /> */}
+      Search equal:{" "}
+      <input
+        type="text"
+        // onChange={equalSort}
+        onChange={(e) => {
+          console.log(selectSortMode, "selSorm");
+          if (selectSortMode == "more") {
+            return sortMoreFunc(
+              e,
+              state,
+              setState,
+              store.selectColumn,
+              store.selectSort
+            );
+          } else if (selectSortMode == "equal") {
+            return sortEqualFunc(e, state, setState, store.selectColumn);
+          }
+
+          // return sortFunc(e, state, setState, selectCol, selectSortMode);
+        }}
+      />
       <br />
       <br />
-      <Dropdown text="Sort By">
+      <Dropdown text="Select Column">
         <Dropdown.Menu>
           {columnOptions.map((item) => (
             <Dropdown.Item
@@ -147,7 +142,12 @@ const Table = () => {
               value={item.value}
               icon={item.icon}
               key={item.key}
-              onClick={handleSort}
+              onClick={(e) => {
+                setselectCol(item.value);
+                store.selectColumn = item.value;
+                console.log(store.selectColumn, "store.selectColumn");
+                // handleselectColumn(e, item.value);
+              }}
             />
           ))}
         </Dropdown.Menu>
@@ -157,10 +157,15 @@ const Table = () => {
           {vulnOptions.map((item) => (
             <Dropdown.Item
               text={item.text}
-              // value={item.value}
+              value={item.value}
               icon={item.icon}
               key={item.key}
-              onClick={sortMore}
+              onClick={(e) => {
+                // console.log(item.value, "setSelectSortMode");
+                store.selectSort = item.value;
+                setSelectSortMode(item.value);
+                console.log(store.selectSort, "store.seelectSort");
+              }}
             />
           ))}
         </Dropdown.Menu>
@@ -209,5 +214,5 @@ const Table = () => {
       </table>
     </>
   );
-};
+});
 export default Table;
