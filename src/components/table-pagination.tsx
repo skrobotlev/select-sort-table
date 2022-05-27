@@ -1,22 +1,33 @@
-import React, { Fragment } from "react";
+import React, { FC, Fragment } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import { lightBlue } from "@material-ui/core/colors";
+import '../global.scss';
 
-const styles = {
+const styles: any = {
   main: {
     border: "1px solid #dddddd",
-    textAlign: "right",
+    textAlign: "center",
     padding: 8,
     paddingLeft: 0,
+    width: "100%"
   },
   page: {
     border: "1px solid #dddddd",
     padding: 8,
     cursor: "pointer",
+    paddingLeft: "10px",
   },
 };
 
-const TablePagination = ({
+interface TablePaginationProps {
+  currentPage: number;
+  pages: number;
+  setPage: Function;
+  pageLimit: number;
+  classes?: any;
+}
+
+const TablePagination: FC<TablePaginationProps> = ({
   currentPage,
   pages,
   setPage,
@@ -41,7 +52,7 @@ const TablePagination = ({
         className={classes.page}
         onClick={() => setPage(pageNum)}
         style={
-          pageNum === currentPage ? { backgroundColor: "lightBlue" } : null
+          pageNum === currentPage ? { backgroundColor: "lightBlue" } : undefined
         }
       >
         {pageNum}
@@ -64,10 +75,10 @@ const TablePagination = ({
   const renderPrevPageBlocks = () => {
     return (
       <Fragment>
-        <a key="first-page" className={classes.page} onClick={() => setPage(0)}>
+        <a key="first-page" className="table-pagination-page" onClick={() => setPage(0)}>
           &#171;
         </a>
-        <a key="prev-page" className={classes.page} onClick={goToPrevPage}>
+        <a key="prev-page" className="table-pagination-page" onClick={goToPrevPage}>
           &#8592;
         </a>
       </Fragment>
@@ -77,12 +88,12 @@ const TablePagination = ({
   const renderNextPageBlocks = () => {
     return (
       <Fragment>
-        <a key="next-page" className={classes.page} onClick={goToNextPage}>
+        <a key="next-page" className="table-pagination-page" onClick={goToNextPage}>
           &rarr;
         </a>
         <a
           key="last-page"
-          className={classes.page}
+          className="table-pagination-page"
           onClick={() => setPage(numPages - 1)}
         >
           &raquo;
@@ -92,7 +103,7 @@ const TablePagination = ({
   };
 
   return (
-    <div className={classes.main}>
+    <div className="table-pagination-main">
       {renderPrevPageBlocks()}
       {renderPageBlocks()}
       {renderNextPageBlocks()}
