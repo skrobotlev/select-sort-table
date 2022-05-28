@@ -1,5 +1,4 @@
 import React, { FC, Fragment } from "react";
-import { withStyles } from "@material-ui/core/styles";
 import '../global.scss';
 
 const styles: any = {
@@ -31,13 +30,12 @@ const TablePagination: FC<TablePaginationProps> = ({
   pages,
   setPage,
   pageLimit,
-  classes,
 }) => {
   const numPages = Math.ceil(pages / pageLimit);
-
+  console.log(numPages, 'numPages')
   const getPaginationNumbers = () => {
     const blocks = [];
-    for (let i = 1; i < numPages; i++) {
+    for (let i = 0; i <= numPages; i++) {
       blocks.push(i);
     }
     return blocks;
@@ -45,22 +43,24 @@ const TablePagination: FC<TablePaginationProps> = ({
 
   const renderPageBlocks = () => {
     const getPageNumbers = getPaginationNumbers();
+    console.log(getPageNumbers, 'getPageNumbers')
     return getPageNumbers.map((pageNum) => (
+
       <a
         key={pageNum}
-        className={classes.page}
+        className="table-pagination-page"
         onClick={() => setPage(pageNum)}
         style={
           pageNum === currentPage ? { backgroundColor: "lightBlue" } : undefined
         }
       >
-        {pageNum}
+        {pageNum + 1}
       </a>
     ));
   };
 
   const goToPrevPage = () => {
-    if (currentPage > 0) {
+    if (currentPage >= 1) {
       setPage(currentPage - 1);
     }
   };
@@ -74,7 +74,7 @@ const TablePagination: FC<TablePaginationProps> = ({
   const renderPrevPageBlocks = () => {
     return (
       <Fragment>
-        <a key="first-page" className="table-pagination-page" onClick={() => setPage(0)}>
+        <a key="first-page" className="table-pagination-page" onClick={() => setPage(1)}>
           &#171;
         </a>
         <a key="prev-page" className="table-pagination-page" onClick={goToPrevPage}>
@@ -103,11 +103,11 @@ const TablePagination: FC<TablePaginationProps> = ({
 
   return (
     <div className="table-pagination-main">
-      {renderPrevPageBlocks()}
-      {renderPageBlocks()}
-      {renderNextPageBlocks()}
+      {numPages > 1 ? renderPrevPageBlocks() : null}
+      {numPages > 1 ? renderPageBlocks() : null}
+      {numPages > 1 ? renderNextPageBlocks() : null}
     </div>
   );
 };
 
-export default withStyles(styles)(TablePagination);
+export default TablePagination;

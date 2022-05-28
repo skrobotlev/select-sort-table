@@ -34,11 +34,12 @@ const Table = observer(() => {
     original: [],
     sortObject: { field: "", order: "" },
   });
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(0);
   const pageLimit: number = 10;
 
   const getPaginatedEntries = (state: any[]) => {
     const offset = page * pageLimit;
+    console.log(offset, 'offset')
     return state.slice(offset, offset + pageLimit);
   };
 
@@ -116,6 +117,7 @@ const Table = observer(() => {
             </tr>
           </thead>
           <tbody>
+            {/* {state.list.map((item, index) => ( */}
             {renderEntries(state.list).map((item, index) => (
               <tr key={index}>
                 <td>
@@ -135,13 +137,12 @@ const Table = observer(() => {
           </tbody>
         </table>
         <TablePagination
-          pageLimit={10}
+          pageLimit={pageLimit}
           pages={state.list.length}
           currentPage={page}
           setPage={setPage}
         />
       </div>
-
     </div>
 
   );
