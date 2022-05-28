@@ -1,4 +1,5 @@
 # Getting Started 
+![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/92730840/170816619-65dc98ed-f5e4-4c94-9fa9-7ca30a9d3d55.gif)
 
 <!-- This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). -->
 ## After cloning the app, install the dependencies with command 
