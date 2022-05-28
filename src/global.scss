@@ -8,10 +8,10 @@
   text-align: center;
   td,
   th {
-    border: 1px solid #333;
+    border: 1px solid #4183c4;
   }
   border-width: 1px;
-  border-color: teal;
+  border-color: #4183c4;
   border-style: solid;
 }
 .table-container {
@@ -45,12 +45,4 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-}
-.select-menu {
-  // padding: 10px 0px 10px 0px;
-  // padding-right: 10px;
-}
-.search-input {
-  // padding: 0px;
-  // height: ;
 }
