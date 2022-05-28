@@ -91,7 +91,6 @@ const Table = observer(() => {
               ))}
             </Dropdown.Menu>
           </Dropdown>
-          {/* Search equal: */}
           <input
             type="text"
             className="search-input"
@@ -110,7 +109,6 @@ const Table = observer(() => {
         <table className="table">
           <thead>
             <tr>
-              {/* <th>Id</th> */}
               <th>Date</th>
               <th>Company</th>
               <th>Amount</th>
@@ -137,7 +135,6 @@ const Table = observer(() => {
           </tbody>
         </table>
         <TablePagination
-
           pageLimit={10}
           pages={state.list.length}
           currentPage={page}

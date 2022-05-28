@@ -1,6 +1,5 @@
 import React, { FC, Fragment } from "react";
 import { withStyles } from "@material-ui/core/styles";
-import { lightBlue } from "@material-ui/core/colors";
 import '../global.scss';
 
 const styles: any = {
